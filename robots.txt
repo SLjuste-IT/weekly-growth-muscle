@@ -3,4 +3,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://serverkakoulabs.org/sitemap.xml
+Sitemap: https://wgmuscle.serverkakoulabs.org/sitemap.xml

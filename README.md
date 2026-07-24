@@ -5,9 +5,9 @@ Plain HTML, CSS, and vanilla JavaScript — **no build step, no framework, no de
 
 ![Static site](https://img.shields.io/badge/static-no%20build%20step-brightgreen)
 ![Stack](https://img.shields.io/badge/stack-HTML%20%7C%20CSS%20%7C%20vanilla%20JS-blue)
-[![Live](https://img.shields.io/badge/live-serverkakoulabs.org-ff6a3d)](https://serverkakoulabs.org)
+[![Live](https://img.shields.io/badge/live-wgmuscle.serverkakoulabs.org-ff6a3d)](https://wgmuscle.serverkakoulabs.org)
 
-🔗 **Live site:** <https://serverkakoulabs.org>
+🔗 **Live site:** <https://wgmuscle.serverkakoulabs.org>
 
 ---
 
@@ -135,7 +135,7 @@ Static site, so there's nothing to build.
    - **Build command:** *(leave empty)*
    - **Build output directory:** `/` (the repo root)
 3. **Save and Deploy.**
-4. Under the project's **Custom domains** tab, add `serverkakoulabs.org`.
+4. Under the project's **Custom domains** tab, add `wgmuscle.serverkakoulabs.org`.
 
 Security headers in [`_headers`](_headers) are applied automatically by Cloudflare Pages.
 

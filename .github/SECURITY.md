@@ -3,7 +3,7 @@
 ## Reporting a vulnerability
 
 If you believe you've found a security vulnerability in the **Weekly Growth Muscle**
-website (<https://serverkakoulabs.org>) or in this repository, please report it privately.
+website (<https://wgmuscle.serverkakoulabs.org>) or in this repository, please report it privately.
 
 **Please do not open a public GitHub issue for security problems.**
 
@@ -26,7 +26,7 @@ log run entirely in the visitor's browser via `localStorage`; nothing is sent to
 
 **In scope**
 
-- The live site at <https://serverkakoulabs.org>
+- The live site at <https://wgmuscle.serverkakoulabs.org>
 - Source in this repository, including the Content-Security-Policy and other headers in [`_headers`](../_headers)
 
 **Out of scope**
