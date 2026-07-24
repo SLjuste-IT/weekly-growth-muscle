@@ -1,0 +1,88 @@
+/* ==========================================================================
+   Weekly Growth Muscle — content pages (Privacy, Terms, About, Contact)
+   Shared styling for the long-form legal / info pages. Linked ONLY on those
+   four pages, after base.css and before enhance.css (the polish layer).
+   Custom properties (--font-head, --ring) come from enhance.css :root and
+   resolve at use-time regardless of stylesheet order.
+   ========================================================================== */
+
+/* ---- page header ---------------------------------------------------------- */
+.page-head{padding:80px 0 12px}
+.page-head .eyebrow{color:var(--accent);font-weight:800;letter-spacing:2px;font-size:12px;text-transform:uppercase}
+.page-head h1{font-family:var(--font-head);font-size:clamp(30px,5vw,52px);font-weight:900;letter-spacing:-1.5px;margin-top:10px;line-height:1.02}
+.page-head .sub{color:var(--mut);max-width:660px;margin-top:16px;font-size:16px;line-height:1.6}
+.page-head .updated{margin-top:16px;font-size:13px;color:var(--mut);opacity:.85}
+
+/* ---- readable long-form column -------------------------------------------- */
+.prose{max-width:780px;margin:0 auto;padding:14px 24px 90px}
+.prose h2{font-family:var(--font-head);font-size:22px;font-weight:800;letter-spacing:-.3px;margin:40px 0 12px;scroll-margin-top:88px}
+.prose h2:first-of-type{margin-top:14px}
+.prose h3{font-size:16px;font-weight:800;margin:24px 0 8px;color:var(--txt)}
+.prose p{color:var(--mut);margin:0 0 14px;line-height:1.75}
+.prose ul,.prose ol{color:var(--mut);margin:0 0 16px;padding-left:22px;line-height:1.7}
+.prose li{margin:7px 0}
+.prose a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.prose a:hover{color:var(--accent)}
+.prose strong{color:var(--txt)}
+.prose .lead{font-size:17px;color:var(--txt);opacity:.94}
+
+/* ---- callout / disclaimer box --------------------------------------------- */
+.callout{
+  margin:22px 0;padding:18px 20px;border-radius:14px;
+  background:rgba(255,177,58,.08);border:1px solid rgba(255,177,58,.28);
+  color:var(--mut);font-size:14.5px;line-height:1.7;
+}
+.callout strong{color:var(--accent2)}
+.callout.warn{background:rgba(255,94,58,.09);border-color:rgba(255,94,58,.32)}
+.callout.warn strong{color:var(--accent)}
+
+/* ---- in-page table of contents -------------------------------------------- */
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px}
+.toc a{
+  font-size:12.5px;font-weight:700;color:var(--mut);text-decoration:none;
+  padding:7px 13px;border-radius:999px;border:1px solid var(--line);
+  background:var(--panel2);transition:color .2s,border-color .2s;
+}
+.toc a:hover{color:var(--txt);border-color:rgba(255,94,58,.4)}
+
+/* ---- About page ----------------------------------------------------------- */
+.about-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:30px 0}
+@media(max-width:760px){.about-grid{grid-template-columns:1fr}}
+.about-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px;transition:transform .25s,border-color .25s}
+.about-card:hover{transform:translateY(-5px);border-color:rgba(255,94,58,.4)}
+.about-card .ic{font-size:26px;margin-bottom:10px}
+.about-card h3{font-size:16px;font-weight:800;margin-bottom:6px}
+.about-card p{color:var(--mut);font-size:13.5px;line-height:1.65;margin:0}
+
+/* ---- Contact page --------------------------------------------------------- */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:8px;align-items:start}
+@media(max-width:820px){.contact-grid{grid-template-columns:1fr}}
+.contact-card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:28px;box-shadow:var(--shadow)}
+.contact-card h2{font-family:var(--font-head);font-size:20px;font-weight:800;margin:0 0 6px}
+.contact-card>p{color:var(--mut);font-size:14px;line-height:1.65;margin:0}
+.email-badge{
+  display:inline-flex;align-items:center;gap:12px;margin-top:16px;
+  font-weight:800;font-size:17px;color:var(--txt);text-decoration:none;
+  padding:12px 16px;border-radius:12px;background:var(--panel2);border:1px solid var(--line);
+  word-break:break-all;transition:border-color .2s}
+.email-badge:hover{border-color:rgba(255,94,58,.5)}
+.email-badge .ic{
+  width:36px;height:36px;flex:none;border-radius:9px;background:var(--grad);
+  display:grid;place-items:center;font-size:18px;color:#1a0e08}
+.contact-list{list-style:none;padding:0;margin:20px 0 0}
+.contact-list li{display:flex;gap:12px;align-items:flex-start;color:var(--mut);font-size:14px;margin:14px 0;line-height:1.6}
+.contact-list .ic{flex:none;font-size:18px;margin-top:1px}
+.contact-list strong{color:var(--txt);font-weight:700}
+
+/* form */
+.field{margin-top:16px}
+.field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px;color:var(--txt)}
+.field input,.field textarea{
+  width:100%;font-family:inherit;font-size:14.5px;color:var(--txt);
+  background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;
+  transition:border-color .2s,box-shadow .2s}
+.field input:focus,.field textarea:focus{outline:none;border-color:rgba(255,94,58,.55);box-shadow:var(--ring)}
+.field textarea{min-height:130px;resize:vertical}
+.form-note{margin-top:14px;font-size:12.5px;color:var(--mut);line-height:1.6}
+.form-msg{margin-top:12px;font-size:13px;font-weight:700;color:var(--accent2);min-height:1em}
+.contact-card form .btn{margin-top:18px}

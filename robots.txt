@@ -1,0 +1,6 @@
+# Weekly Growth Muscle — robots.txt
+# Allow all reputable crawlers (incl. Googlebot and Mediapartners-Google for AdSense).
+User-agent: *
+Allow: /
+
+Sitemap: https://serverkakoulabs.org/sitemap.xml

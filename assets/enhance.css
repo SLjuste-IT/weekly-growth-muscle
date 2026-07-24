@@ -1,0 +1,182 @@
+/* ==========================================================================
+   Weekly Growth Muscle — shared UX/visual enhancement layer
+   Loaded AFTER each page's inline <style> so these rules win at equal
+   specificity. Pure progressive enhancement: brand + structure unchanged.
+   ========================================================================== */
+
+/* Fonts load via <link> in each page's <head> (faster, parallel fetch). */
+
+:root{
+  --font-body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-head:'Sora','Inter',system-ui,sans-serif;
+  /* offset focus ring: dark gap + amber halo, readable on any surface */
+  --ring:0 0 0 2px var(--bg), 0 0 0 5px rgba(255,177,58,.7);
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+
+/* ---- Typography: real display + body faces --------------------------------- */
+body{font-family:var(--font-body)}
+h1,h2,h3,h4,.h2,.h3,.logo b,.banner h2,.stat .v,.day-head h3,.rest-card h3{
+  font-family:var(--font-head);
+}
+
+/* ---- Selection + scrollbar polish ----------------------------------------- */
+::selection{background:rgba(255,94,58,.32);color:#fff}
+html{scrollbar-color:var(--accent) transparent}
+::-webkit-scrollbar{width:12px;height:12px}
+::-webkit-scrollbar-thumb{
+  background:linear-gradient(var(--accent),var(--accent2));
+  border-radius:20px;border:3px solid var(--bg);
+}
+::-webkit-scrollbar-track{background:transparent}
+
+/* ---- Accessibility: consistent, visible focus ----------------------------- */
+a:focus-visible,button:focus-visible,.btn:focus-visible,
+[tabindex]:focus-visible,.daytab:focus-visible,.gmore:focus-visible,.more:focus-visible{
+  outline:none;
+  box-shadow:var(--ring);
+}
+/* keep the existing nicer outline on workout tabs, just tidy the offset */
+.tab:focus-visible{outline:3px solid rgba(255,177,58,.85);outline-offset:2px;box-shadow:none}
+
+/* ---- Buttons: press feedback + light sweep -------------------------------- */
+.btn{position:relative;overflow:hidden;isolation:isolate;
+  transition:transform .18s var(--ease),box-shadow .2s var(--ease)}
+.btn:active{transform:translateY(0) scale(.96)}
+.btn::after{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);
+  transform:translateX(-130%);transition:transform .6s var(--ease);
+}
+.btn:hover::after{transform:translateX(130%)}
+
+/* ---- Nav: animated underline + active state ------------------------------- */
+.nav-links a{position:relative;padding:6px 1px}
+.nav-links a::after{
+  content:"";position:absolute;left:0;right:100%;bottom:-3px;height:2px;
+  border-radius:2px;background:var(--grad);transition:right .25s var(--ease);
+}
+.nav-links a:hover::after,.nav-links a.active::after{right:0}
+
+/* ---- Cards: subtle gradient ring on hover (index + cardio) ---------------- */
+.card{position:relative}
+.card::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;z-index:4;
+  pointer-events:none;opacity:0;transition:opacity .3s ease;
+  background:linear-gradient(135deg,rgba(255,94,58,.75),rgba(255,177,58,.75));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+}
+.card:hover::before{opacity:1}
+
+/* ---- Grid entrance: gentle staggered fade (opacity-only, hover-safe) ------- */
+@media (prefers-reduced-motion:no-preference){
+  @keyframes wgmFadeIn{from{opacity:0}to{opacity:1}}
+  .ex-grid>.card,.meal-grid>.meal,.sup-grid>.sup,.grocery-grid>.gcard,
+  .info-grid>.info,.target-grid>.stat,.ex-row>.stat{
+    opacity:0;animation:wgmFadeIn .5s ease forwards;
+  }
+  .ex-grid>.card:nth-child(1),.meal-grid>.meal:nth-child(1),.sup-grid>.sup:nth-child(1),
+  .grocery-grid>.gcard:nth-child(1),.info-grid>.info:nth-child(1),
+  .target-grid>.stat:nth-child(1),.ex-row>.stat:nth-child(1){animation-delay:.04s}
+  .ex-grid>.card:nth-child(2),.meal-grid>.meal:nth-child(2),.sup-grid>.sup:nth-child(2),
+  .grocery-grid>.gcard:nth-child(2),.info-grid>.info:nth-child(2),
+  .target-grid>.stat:nth-child(2),.ex-row>.stat:nth-child(2){animation-delay:.10s}
+  .ex-grid>.card:nth-child(3),.meal-grid>.meal:nth-child(3),.sup-grid>.sup:nth-child(3),
+  .grocery-grid>.gcard:nth-child(3),.info-grid>.info:nth-child(3),
+  .target-grid>.stat:nth-child(3),.ex-row>.stat:nth-child(3){animation-delay:.16s}
+  .ex-grid>.card:nth-child(4),.meal-grid>.meal:nth-child(4),.sup-grid>.sup:nth-child(4),
+  .grocery-grid>.gcard:nth-child(4),.info-grid>.info:nth-child(4),
+  .target-grid>.stat:nth-child(4),.ex-row>.stat:nth-child(4){animation-delay:.22s}
+  .ex-grid>.card:nth-child(5),.meal-grid>.meal:nth-child(5),.sup-grid>.sup:nth-child(5),
+  .target-grid>.stat:nth-child(5){animation-delay:.28s}
+  .ex-grid>.card:nth-child(n+6),.meal-grid>.meal:nth-child(n+6),
+  .sup-grid>.sup:nth-child(n+6){animation-delay:.34s}
+}
+
+/* --- Navigation Toggle & Mobile Menu Fix --- */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--txt);
+  cursor: pointer;
+  padding: 8px;
+}
+.nav-toggle svg { width: 28px; height: 28px; }
+.nav-toggle .x { display: none; }
+.nav-toggle[aria-expanded="true"] .menu { display: none; }
+.nav-toggle[aria-expanded="true"] .x { display: block; }
+
+@media(max-width: 760px) {
+  .nav-toggle { display: block; margin-left: auto; }
+  /* keep the phone header from overflowing: hide the redundant CTA, shrink the logo */
+  nav .nav-in > .btn { display: none; }
+  .logo b { font-size: 15px; }
+  .logo span { font-size: 11px; }
+  .logo .mark { width: 34px; height: 34px; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 68px; /* Aligns right beneath the nav bar */
+    left: 0;
+    width: 100%;
+    background: rgba(10, 11, 16, 0.95);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+    flex-direction: column;
+    padding: 24px;
+    gap: 20px;
+    box-shadow: var(--shadow);
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a::after { display: none; }
+}
+
+/* ---- Trust / author note (top of YMYL content pages) ---------------------- */
+.trust-note{
+  display:flex;gap:12px;align-items:flex-start;
+  margin:14px 0 0;padding:14px 18px;border-radius:14px;
+  background:rgba(255,177,58,.08);border:1px solid rgba(255,177,58,.28);
+  font-size:13.5px;line-height:1.6;color:var(--mut);
+}
+.trust-note .ic{flex:none;font-size:19px;line-height:1.5}
+.trust-note strong{color:var(--txt)}
+.trust-note a{color:var(--accent2);font-weight:700;text-decoration:underline;text-underline-offset:2px}
+.trust-note a:hover{color:var(--accent)}
+
+/* ---- Cookie consent banner (injected by enhance.js) ----------------------- */
+.wgm-cookie{
+  position:fixed;left:16px;right:16px;bottom:16px;z-index:200;
+  max-width:560px;margin:0 auto;
+  background:rgba(17,19,28,.94);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  border:1px solid var(--line);border-radius:16px;
+  box-shadow:0 30px 60px -20px rgba(0,0,0,.85);
+  padding:18px 20px;color:var(--txt);
+  transform:translateY(160%);transition:transform .5s var(--ease);
+}
+.wgm-cookie.show{transform:none}
+.wgm-cookie p{margin:0 0 14px;font-size:13.5px;line-height:1.6;color:var(--mut)}
+.wgm-cookie a{color:var(--accent2);text-decoration:underline;text-underline-offset:2px}
+.wgm-cookie a:hover{color:var(--accent)}
+.wgm-cookie .row{display:flex;gap:10px;flex-wrap:wrap}
+.wgm-cookie .btn{padding:9px 20px;font-size:13px}
+.wgm-cookie .decline{
+  padding:9px 20px;font-size:13px;border-radius:12px;font-weight:700;font-family:inherit;cursor:pointer;
+  background:transparent;color:var(--txt);border:1px solid var(--line);
+  transition:border-color .2s,transform .18s var(--ease);
+}
+.wgm-cookie .decline:hover{border-color:rgba(255,255,255,.28)}
+.wgm-cookie .decline:active{transform:scale(.96)}
+@media(max-width:480px){.wgm-cookie .row .btn,.wgm-cookie .row .decline{flex:1}}
+@media(prefers-reduced-motion:reduce){.wgm-cookie{transition:none;transform:none}}
+
+/* ---- Respect reduced-motion globally (CRITICAL a11y) ---------------------- */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important;scroll-behavior:auto!important;
+  }
+  .reveal{opacity:1!important;transform:none!important}
+}

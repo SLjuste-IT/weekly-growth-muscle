@@ -1,0 +1,14 @@
+# Local dev tooling & agent config — not part of the website, don't deploy
+.claude/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Unused originals — replaced by optimized .jpg, must not be deployed
+img/hero-banner.png
+img/nutrition-banner.png
+
+# Local image backups (if any)
+img_original/

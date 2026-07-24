@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0a0b10" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="description" content="Log your lifts and track progressive overload week after week. Free, private workout logging that saves right in your browser — no account needed." />
+<link rel="canonical" href="https://serverkakoulabs.org/log.html" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://serverkakoulabs.org/log.html" />
+<meta property="og:title" content="Log Workout — Weekly Growth Muscle" />
+<meta property="og:description" content="Track progressive overload week after week. Private workout logging that saves in your browser — no account needed." />
+<meta property="og:image" content="https://serverkakoulabs.org/img/hero-banner.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://serverkakoulabs.org/img/hero-banner.jpg" />
+<title>Log Workout — Weekly Growth Muscle</title>
+<link rel="stylesheet" href="assets/base.css" />
+<style>
+  /* page header */
+  section{padding:48px 0}
+  .page-head{padding:80px 0 10px}
+  .eyebrow{color:var(--accent);font-weight:800;letter-spacing:2px;font-size:12px;text-transform:uppercase}
+  .h2{font-size:clamp(28px,4vw,44px);font-weight:900;letter-spacing:-1px;margin-top:8px}
+  .h3{font-size:clamp(22px,3vw,30px);font-weight:900;letter-spacing:-.5px}
+  .sub{color:var(--mut);max-width:680px;margin-top:14px}
+  .seclabel{color:var(--accent);font-weight:800;letter-spacing:2px;font-size:12px;text-transform:uppercase;margin-bottom:8px}
+
+  /* stat row */
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:26px}
+  @media(max-width:720px){.stat-row{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:420px){.stat-row{grid-template-columns:1fr}}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--shadow)}
+  .stat .v{font-size:24px;font-weight:900;letter-spacing:-.5px;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .stat .l{font-weight:800;margin-top:8px;font-size:14px}
+  .stat .u{color:var(--mut);font-size:12.5px;margin-top:3px}
+
+  /* logger form */
+  .logger{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow);margin-top:26px}
+  .logger h4{font-size:18px;font-weight:800}
+  .form-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:18px}
+  .field.wide{grid-column:span 2}
+  .field.full{grid-column:1/-1}
+  @media(max-width:680px){.form-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:430px){.form-grid{grid-template-columns:1fr}.field.wide{grid-column:auto}}
+  .field{display:flex;flex-direction:column;gap:8px}
+  .field>span{font-size:11.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mut)}
+  .field input,.field select,.field textarea{
+    background:var(--panel2);border:1px solid var(--line);border-radius:11px;
+    padding:12px 13px;color:var(--txt);font:inherit;font-size:16px;width:100%;
+    -webkit-appearance:none;appearance:none;transition:border-color .2s,box-shadow .2s;
+  }
+  .field input,.field select{height:46px}
+  .field textarea{min-height:46px;resize:vertical;line-height:1.5}
+  .field select{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239aa3bd' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;cursor:pointer;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,94,58,.22)}
+  .logger-actions{margin-top:18px;display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  .logger-actions .btn{min-height:46px;padding:12px 24px}
+
+  /* list */
+  .list-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .week-group{margin-top:24px}
+  .week-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:1px solid var(--line);margin-bottom:14px}
+  .week-head h4{font-size:16px;font-weight:800}
+  .week-head span{font-size:12.5px;color:var(--mut);font-weight:600;white-space:nowrap}
+  .log-row{display:flex;gap:14px;justify-content:space-between;align-items:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow);transition:border-color .2s,transform .2s}
+  .log-row:hover{border-color:rgba(255,94,58,.35);transform:translateY(-2px)}
+  .log-ex{font-weight:800;font-size:15.5px;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+  .chip{font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--accent2);background:var(--panel2);border:1px solid var(--line);padding:3px 10px;border-radius:999px}
+  .log-meta{margin-top:8px;font-size:14px;color:var(--txt)}
+  .log-meta b{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .log-notes{margin-top:8px;font-size:13px;color:var(--mut);line-height:1.55}
+  .log-side{display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex:none}
+  .log-date{font-size:12.5px;font-weight:700;color:var(--mut);white-space:nowrap}
+  .del{width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:var(--panel2);color:var(--mut);cursor:pointer;font-size:13px;line-height:1;transition:.2s}
+  .del:hover{background:rgba(255,94,58,.18);color:var(--txt);border-color:rgba(255,94,58,.4)}
+
+  .empty{margin-top:26px;text-align:center;padding:48px 24px;border:1px dashed var(--line);border-radius:18px;color:var(--mut)}
+  .empty .big{font-size:46px}
+  .empty h4{font-size:18px;font-weight:800;color:var(--txt);margin-top:10px}
+  .empty p{margin-top:6px;font-size:14px;max-width:400px;margin-inline:auto;line-height:1.6}
+
+  .note{margin-top:22px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:16px 20px;color:var(--mut);font-size:13.5px;max-width:820px;line-height:1.6}
+
+  footer{margin-top:40px}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23ff5e3a'/%3E%3Cg fill='%23fff'%3E%3Crect x='6' y='14.5' width='20' height='3' rx='1.5'/%3E%3Crect x='3.5' y='10.5' width='4.5' height='11' rx='1.6'/%3E%3Crect x='24' y='10.5' width='4.5' height='11' rx='1.6'/%3E%3C/g%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Sora:wght@600;700;800&amp;display=swap" />
+<link rel="stylesheet" href="assets/enhance.css" />
+<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a class="logo" href="index.html">
+      <div class="mark">💪</div>
+      <div><b>Weekly Growth Muscle</b><span>10-Week Mass Builder</span></div>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html#about">Program</a>
+      <a href="cardio.html">Cardio</a>
+      <a href="nutrition.html">Nutrition</a>
+      <a class="active" href="log.html">Log Workout</a>
+      <a href="supplement.html">Supplement</a>
+      <a href="wellness.html">Wellness</a>
+    </div>
+    <a class="btn" href="index.html#plan">Start Training</a>
+    <button class="nav-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navLinks">
+      <svg class="menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<noscript>
+  <div class="wrap" style="margin:18px auto">
+    <p style="background:rgba(255,177,58,.08);border:1px solid rgba(255,177,58,.25);border-radius:12px;padding:14px 18px;color:var(--accent2);font-size:14px;margin:0">⚠️ This site needs JavaScript enabled to log workouts and view your saved history.</p>
+  </div>
+</noscript>
+
+<header class="wrap page-head reveal">
+  <span class="eyebrow">Track · Progress · Overload</span>
+  <h1 class="h2">Log Your Lifts</h1>
+  <p class="sub">Progressive overload is the absolute driver of muscle mass. If you aren't tracking, you aren't growing. Record every single rep and weight, and force those numbers higher week after week. To make it completely frictionless, all your data saves securely and privately right here in your browser. No sign-ups, no accounts—just pure, uninterrupted progress.</p>
+</header>
+
+<!-- STATS -->
+<section class="wrap reveal" style="padding-top:8px">
+  <div class="stat-row" id="statRow"></div>
+</section>
+
+<!-- LOGGER -->
+<section class="wrap reveal" style="padding-top:0">
+  <form class="logger" id="logForm" autocomplete="off">
+    <div class="seclabel">Add Entry</div>
+    <h4>Log a Set</h4>
+    <div class="form-grid">
+      <label class="field"><span>Date</span>
+        <input id="date" type="date" required />
+      </label>
+      <label class="field wide"><span>Exercise</span>
+        <input id="exercise" type="text" list="exList" placeholder="e.g. Barbell Bench Press" required />
+      </label>
+      <label class="field"><span>Workout focus</span>
+        <select id="focus">
+          <option>Chest &amp; Triceps</option>
+          <option>Back &amp; Biceps</option>
+          <option>Shoulders &amp; Forearms</option>
+          <option>Legs &amp; Calves</option>
+          <option>Cardio</option>
+          <option>Other</option>
+        </select>
+      </label>
+      <label class="field"><span>Weight</span>
+        <input id="weight" type="number" inputmode="decimal" min="0" max="2000" step="0.5" placeholder="185" />
+      </label>
+      <label class="field"><span>Unit</span>
+        <select id="unit">
+          <option value="lb" selected>lb</option>
+          <option value="kg">kg</option>
+        </select>
+      </label>
+      <label class="field"><span>Sets</span>
+        <input id="sets" type="number" inputmode="numeric" min="1" max="20" step="1" placeholder="4" />
+      </label>
+      <label class="field"><span>Reps</span>
+        <input id="reps" type="text" placeholder="10, 8, 8, 6" />
+      </label>
+      <label class="field full"><span>Notes (optional)</span>
+        <textarea id="notes" rows="2" placeholder="How did it feel? Up from last week?"></textarea>
+      </label>
+    </div>
+    <datalist id="exList">
+      <option value="Barbell Bench Press"></option><option value="Incline Bench Press"></option>
+      <option value="Decline Bench Press"></option><option value="Dumbbell Flys"></option>
+      <option value="Dumbbell Pullover"></option><option value="Tricep Extension"></option>
+      <option value="Tricep Dip"></option><option value="Tricep Bench Dip"></option>
+      <option value="Deadlift"></option><option value="Chin Up"></option>
+      <option value="One Arm Dumbbell Row"></option><option value="Seated Row"></option>
+      <option value="Close Grip Lat Pull Down"></option><option value="Standing Barbell Curl"></option>
+      <option value="Close Grip Preacher Curl"></option><option value="Incline Dumbbell Curl"></option>
+      <option value="Concentration Curl"></option><option value="Machine Shoulder Press"></option>
+      <option value="Dumbbell Reverse Fly"></option><option value="Military Press"></option>
+      <option value="Dumbbell Lateral Raise"></option><option value="Dumbbell Shrugs"></option>
+      <option value="Upright Row"></option><option value="Standing Wrist Curl"></option>
+      <option value="Barbell Wrist Curl"></option><option value="Seated Wrist Curl"></option>
+      <option value="Squat"></option><option value="Leg Extension"></option>
+      <option value="Leg Curl"></option><option value="Standing Calf Raise"></option>
+      <option value="Seated Calf Raise"></option><option value="Cable Chest Fly"></option>
+      <option value="Cable Kick-Back"></option>
+    </datalist>
+    <div class="logger-actions">
+      <button class="btn" type="submit">Add to log</button>
+      <button class="btn ghost" type="button" id="clearBtn">Clear all</button>
+    </div>
+  </form>
+</section>
+
+<!-- HISTORY -->
+<section class="wrap reveal" style="padding-top:0">
+  <div class="list-head">
+    <div>
+      <div class="seclabel">History</div>
+      <h2 class="h3">Your Weekly Progress</h2>
+    </div>
+  </div>
+  <div id="logList"></div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <p class="foot-disclaimer"><span aria-hidden="true">⚕️</span> <strong>Medical disclaimer:</strong> Weekly Growth Muscle provides general fitness, nutrition, and supplement information for educational purposes only — it is not medical advice, and it is not written by a licensed healthcare professional. Always consult a qualified physician before starting any new exercise, diet, or supplement program. <a href="terms.html#health">Read the full disclaimer</a>.</p>
+    <a class="logo" href="index.html"><div class="mark">💪</div><div><b>Weekly Growth Muscle</b><span>Train hard. Eat big. Grow weekly.</span></div></a>
+    <div class="foot-right">
+      <nav class="foot-links" aria-label="Legal and site info">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="foot-copy">© 2026 Weekly Growth Muscle · 10-Week Mass Builder</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const KEY = 'wgm-workout-log';
+let entries = load();
+
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)) || []; }catch(e){ return []; } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(entries)); }catch(e){} }
+
+function escapeHTML(value){
+  return String(value).replace(/[&<>"']/g,ch=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[ch]));
+}
+
+function todayISO(){
+  const d = new Date();
+  return new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+}
+function parseISO(iso){ return new Date(iso + 'T00:00:00'); }
+function weekStart(iso){
+  const d = parseISO(iso);
+  const back = (d.getDay() + 6) % 7;   // days since Monday
+  d.setDate(d.getDate() - back);
+  d.setHours(0,0,0,0);
+  return d;
+}
+function shortDate(iso){ return parseISO(iso).toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
+function weekLabel(d){ return 'Week of ' + d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+
+const els = {
+  form:    document.getElementById('logForm'),
+  date:    document.getElementById('date'),
+  exercise:document.getElementById('exercise'),
+  focus:   document.getElementById('focus'),
+  weight:  document.getElementById('weight'),
+  unit:    document.getElementById('unit'),
+  sets:    document.getElementById('sets'),
+  reps:    document.getElementById('reps'),
+  notes:   document.getElementById('notes'),
+  statRow: document.getElementById('statRow'),
+  list:    document.getElementById('logList'),
+  clear:   document.getElementById('clearBtn'),
+};
+
+els.date.value = todayISO();
+
+els.form.addEventListener('submit', e=>{
+  e.preventDefault();
+  const exercise = els.exercise.value.trim();
+  if(!exercise){ els.exercise.focus(); return; }
+  entries.push({
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    date: els.date.value || todayISO(),
+    focus: els.focus.value,
+    exercise: exercise,
+    weight: els.weight.value !== '' ? parseFloat(els.weight.value) : null,
+    unit: els.unit.value,
+    sets: els.sets.value !== '' ? parseInt(els.sets.value,10) : null,
+    reps: els.reps.value.trim(),
+    notes: els.notes.value.trim(),
+  });
+  save();
+  render();
+  // keep date + focus for fast multi-set logging, clear the rest
+  els.exercise.value=''; els.weight.value=''; els.sets.value=''; els.reps.value=''; els.notes.value='';
+  els.exercise.focus();
+});
+
+els.list.addEventListener('click', e=>{
+  const btn = e.target.closest('.del');
+  if(!btn) return;
+  entries = entries.filter(x => x.id !== btn.dataset.id);
+  save();
+  render();
+});
+
+els.clear.addEventListener('click', ()=>{
+  if(!entries.length) return;
+  if(confirm('Delete all logged entries? This cannot be undone.')){ entries = []; save(); render(); }
+});
+
+function renderStats(){
+  const total = entries.length;
+  const sessions = new Set(entries.map(e=>e.date)).size;
+  const thisWeekKey = weekStart(todayISO()).getTime();
+  const thisWeek = entries.filter(e => weekStart(e.date).getTime() === thisWeekKey).length;
+  let top = null;
+  entries.forEach(e=>{ if(e.weight != null && (!top || e.weight > top.weight)) top = e; });
+  const topText = top ? `${top.weight} ${escapeHTML(top.unit)}` : '—';
+
+  const stats = [
+    {v: total,     l:'Entries',  u:'logged all-time'},
+    {v: sessions,  l:'Sessions', u:'distinct training days'},
+    {v: thisWeek,  l:'This Week', u:'entries so far'},
+    {v: topText,   l:'Top Set',  u:'heaviest logged'},
+  ];
+  els.statRow.innerHTML = stats.map(s=>`
+    <div class="stat">
+      <div class="v">${escapeHTML(String(s.v))}</div>
+      <div class="l">${escapeHTML(s.l)}</div>
+      <div class="u">${escapeHTML(s.u)}</div>
+    </div>`).join('');
+}
+
+function rowHTML(e){
+  const meta = [];
+  if(e.weight != null) meta.push(`<b>${e.weight} ${escapeHTML(e.unit)}</b>`);
+  if(e.sets != null)   meta.push(`${e.sets} ${e.sets === 1 ? 'set' : 'sets'}`);
+  if(e.reps)           meta.push(`${escapeHTML(e.reps)} reps`);
+  return `<div class="log-row">
+    <div class="log-main">
+      <div class="log-ex">${escapeHTML(e.exercise)}${e.focus ? `<span class="chip">${escapeHTML(e.focus)}</span>` : ''}</div>
+      ${meta.length ? `<div class="log-meta">${meta.join(' · ')}</div>` : ''}
+      ${e.notes ? `<div class="log-notes">${escapeHTML(e.notes)}</div>` : ''}
+    </div>
+    <div class="log-side">
+      <div class="log-date">${shortDate(e.date)}</div>
+      <button class="del" type="button" data-id="${e.id}" aria-label="Delete ${escapeHTML(e.exercise)} entry">✕</button>
+    </div>
+  </div>`;
+}
+
+function renderList(){
+  if(!entries.length){
+    els.list.innerHTML = `<div class="empty">
+      <div class="big">🏋️</div>
+      <h4>No entries yet</h4>
+      <p>Log your first set above. As you add more, your lifts will be grouped by week so you can see your progress build.</p>
+    </div>`;
+    return;
+  }
+  const sorted = entries.slice().sort((a,b)=> b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
+  const groups = {};
+  sorted.forEach(e=>{
+    const ws = weekStart(e.date);
+    const k = ws.getTime();
+    (groups[k] = groups[k] || {ws, items:[]}).items.push(e);
+  });
+  const keys = Object.keys(groups).sort((a,b)=> b - a);
+  els.list.innerHTML = keys.map(k=>{
+    const g = groups[k];
+    const n = g.items.length;
+    return `<div class="week-group">
+      <div class="week-head"><h4>${escapeHTML(weekLabel(g.ws))}</h4><span>${n} ${n === 1 ? 'entry' : 'entries'}</span></div>
+      ${g.items.map(rowHTML).join('')}
+    </div>`;
+  }).join('');
+}
+
+function render(){ renderStats(); renderList(); }
+render();
+
+/* scroll reveal */
+const revealEls = document.querySelectorAll('.reveal');
+if('IntersectionObserver' in window){
+  const io = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.08});
+  revealEls.forEach(el=>io.observe(el));
+}else{
+  revealEls.forEach(el=>el.classList.add('in'));
+}
+</script>
+<script src="assets/enhance.js" defer></script>
+</body>
+</html>

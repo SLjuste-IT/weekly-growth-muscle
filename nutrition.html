@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0a0b10" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="description" content="The bulking nutrition blueprint: a TDEE and macro calculator, a full 7-day mass-gain meal plan, and a ready-to-shop grocery list." />
+<link rel="canonical" href="https://serverkakoulabs.org/nutrition.html" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://serverkakoulabs.org/nutrition.html" />
+<meta property="og:title" content="Nutrition — Weekly Growth Muscle" />
+<meta property="og:description" content="A TDEE and macro calculator, a full 7-day mass-gain meal plan, and a ready-to-shop grocery list." />
+<meta property="og:image" content="https://serverkakoulabs.org/img/nutrition-banner.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://serverkakoulabs.org/img/nutrition-banner.jpg" />
+<title>Nutrition — Weekly Growth Muscle</title>
+<link rel="stylesheet" href="assets/base.css" />
+<style>
+  /* page header */
+  section{padding:48px 0}
+  .page-head{padding:80px 0 10px}
+  .eyebrow{color:var(--accent);font-weight:800;letter-spacing:2px;font-size:12px;text-transform:uppercase}
+  .h2{font-size:clamp(28px,4vw,44px);font-weight:900;letter-spacing:-1px;margin-top:8px}
+  .h3{font-size:clamp(22px,3vw,30px);font-weight:900;letter-spacing:-.5px}
+  .sub{color:var(--mut);max-width:640px;margin-top:14px}
+  .seclabel{color:var(--accent);font-weight:800;letter-spacing:2px;font-size:12px;text-transform:uppercase;margin-bottom:8px}
+
+  /* header: text left, banner image right */
+  .head-grid{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center}
+  .head-img{width:100%;height:auto;aspect-ratio:2816/1536;display:block;border-radius:18px;border:1px solid var(--line);box-shadow:var(--shadow)}
+  @media(max-width:820px){.head-grid{grid-template-columns:1fr}}
+
+  /* macro target cards */
+  .target-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:26px}
+  @media(max-width:900px){.target-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.target-grid{grid-template-columns:1fr}}
+  .stat{
+    position:relative;overflow:hidden;
+    background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    padding:20px;box-shadow:var(--shadow);
+  }
+  .stat .v{font-size:23px;font-weight:900;letter-spacing:-.5px;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .stat .l{font-weight:800;margin-top:8px;font-size:14px}
+  .stat .u{color:var(--mut);font-size:12.5px;margin-top:3px}
+  .note{
+    margin-top:24px;background:var(--panel2);border:1px solid var(--line);
+    border-radius:12px;padding:16px 20px;color:var(--mut);font-size:14px;max-width:780px;line-height:1.6;
+  }
+
+  /* TDEE & macro calculator */
+  .calc{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow);margin-top:24px}
+  .calc-head{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between}
+  .calc-head h4{font-size:18px;font-weight:800}
+  .calc-head .seclabel{margin-bottom:4px}
+  .seg{display:inline-flex;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:4px;gap:4px}
+  .seg button{border:none;background:none;color:var(--mut);font:inherit;font-weight:700;font-size:13px;padding:10px 16px;border-radius:8px;cursor:pointer;transition:background .2s,color .2s}
+  .seg button:hover{color:var(--txt)}
+  .seg button.on{background:var(--grad);color:#1a0e08}
+  .calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:18px}
+  .field.wide{grid-column:span 2}
+  @media(max-width:680px){.calc-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:430px){.calc-grid{grid-template-columns:1fr}.field.wide{grid-column:auto}}
+  .field{display:flex;flex-direction:column;gap:8px}
+  .field>span{font-size:11.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--mut)}
+  .field input,.field select{
+    background:var(--panel2);border:1px solid var(--line);border-radius:11px;
+    padding:12px 13px;color:var(--txt);font:inherit;font-size:16px;width:100%;height:46px;
+    -webkit-appearance:none;appearance:none;transition:border-color .2s,box-shadow .2s;
+  }
+  .field select{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239aa3bd' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;cursor:pointer;
+  }
+  .field input:focus,.field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(255,94,58,.22)}
+  .calc-actions{margin-top:18px;display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  .calc .btn{min-height:46px;padding:12px 24px}
+  .calc-err{color:var(--accent);font-size:13px;font-weight:600}
+
+  /* day tabs */
+  .daytabs{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+  .daytab{
+    padding:10px 18px;border-radius:11px;border:1px solid var(--line);
+    background:var(--panel2);color:var(--mut);font-weight:700;font-size:14px;
+    cursor:pointer;font-family:inherit;transition:.2s;
+  }
+  .daytab:hover{color:var(--txt)}
+  .daytab.active{background:var(--grad);color:#1a0e08;border-color:transparent;box-shadow:0 12px 26px -12px var(--accent)}
+
+  /* meal cards */
+  .meal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:26px}
+  .meal{
+    background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    padding:18px 20px;box-shadow:var(--shadow);transition:transform .25s,box-shadow .25s;
+  }
+  .meal:hover{transform:translateY(-5px);box-shadow:0 34px 60px -25px rgba(255,94,58,.3)}
+  .meal .tag{color:var(--accent);font-weight:800;letter-spacing:1.5px;font-size:11px;text-transform:uppercase}
+  .meal ul{list-style:none;margin-top:12px;display:flex;flex-direction:column;gap:8px}
+  .meal li{position:relative;padding-left:18px;font-size:14px;line-height:1.45}
+  .meal li::before{content:"";position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%;background:var(--grad)}
+
+  /* grocery cards */
+  .grocery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:26px;align-items:start}
+  @media(max-width:980px){.grocery-grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.grocery-grid{grid-template-columns:1fr}}
+  .gcard{
+    background:var(--panel);border:1px solid var(--line);border-radius:18px;
+    padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;
+  }
+  .gcard h4{font-size:16px;font-weight:800;display:flex;align-items:center;gap:10px}
+  .gcard h4 .dot{width:10px;height:10px;border-radius:3px;background:var(--grad);transform:rotate(-8deg)}
+  .gcard ul{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:8px;min-height:196px}
+  .gcard li{position:relative;padding-left:18px;font-size:14px;color:var(--mut)}
+  .gcard li::before{content:"";position:absolute;left:0;top:7px;width:6px;height:6px;border-radius:50%;background:var(--accent2);opacity:.8}
+  .gcard.collapsed li:nth-child(n+8){display:none}
+  .gmore{
+    margin-top:14px;align-self:flex-start;padding:0;border:none;background:none;cursor:pointer;
+    color:var(--accent);font-weight:700;font-size:13px;font-family:inherit;
+  }
+  .gmore.off{visibility:hidden;pointer-events:none}
+  .gmore:hover{text-decoration:underline}
+
+  footer{margin-top:40px}
+</style>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23ff5e3a'/%3E%3Cg fill='%23fff'%3E%3Crect x='6' y='14.5' width='20' height='3' rx='1.5'/%3E%3Crect x='3.5' y='10.5' width='4.5' height='11' rx='1.6'/%3E%3Crect x='24' y='10.5' width='4.5' height='11' rx='1.6'/%3E%3C/g%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Sora:wght@600;700;800&amp;display=swap" />
+<link rel="stylesheet" href="assets/enhance.css" />
+<noscript><style>.reveal{opacity:1!important;transform:none!important}</style></noscript>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Nutrition — Weekly Growth Muscle","description":"The bulking nutrition blueprint: a TDEE and macro calculator, a full 7-day mass-gain meal plan, and a ready-to-shop grocery list.","image":"https://serverkakoulabs.org/img/hero-banner.jpg","datePublished":"2026-07-24","dateModified":"2026-07-24","mainEntityOfPage":"https://serverkakoulabs.org/nutrition.html","author":{"@type":"Organization","name":"Weekly Growth Muscle"},"publisher":{"@type":"Organization","name":"Weekly Growth Muscle","logo":{"@type":"ImageObject","url":"https://serverkakoulabs.org/apple-touch-icon.png"}}}</script>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a class="logo" href="index.html">
+      <div class="mark">💪</div>
+      <div><b>Weekly Growth Muscle</b><span>10-Week Mass Builder</span></div>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="index.html#about">Program</a>
+      <a href="cardio.html">Cardio</a>
+      <a class="active" href="nutrition.html">Nutrition</a>
+      <a href="log.html">Log Workout</a>
+      <a href="supplement.html">Supplement</a>
+      <a href="wellness.html">Wellness</a>
+    </div>
+    <a class="btn" href="index.html#plan">Start Training</a>
+    <button class="nav-toggle" type="button" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navLinks">
+      <svg class="menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<noscript>
+  <div class="wrap" style="margin:18px auto">
+    <p style="background:rgba(255,177,58,.08);border:1px solid rgba(255,177,58,.25);border-radius:12px;padding:14px 18px;color:var(--accent2);font-size:14px;margin:0">⚠️ This site needs JavaScript enabled to show the macro calculator, meal plan and grocery list.</p>
+  </div>
+</noscript>
+
+<header class="wrap page-head reveal">
+  <div class="head-grid">
+    <div>
+      <span class="eyebrow">Bulking · Macros · Meal Plan</span>
+      <h1 class="h2">The Growth Diet</h1>
+      <p class="sub">You cannot out-work a garbage diet. To pack on serious size week after week, you need to force-feed your recovery with the right surplus of calories and protein. We've laid out the ultimate blueprint: a complete 7-day meal plan and a plug-and-play grocery list so you never miss a meal.</p>
+    </div>
+    <img class="head-img" src="img/nutrition-banner.jpg" width="2816" height="1536" fetchpriority="high" decoding="async" alt="Bulking, macros and meal plan — nutrition overview" onerror="this.style.display='none'" />
+  </div>
+</header>
+
+<div class="wrap">
+  <p class="trust-note">
+    <span class="ic" aria-hidden="true">✍️</span>
+    <span><strong>Before you overhaul your diet:</strong> this page is written by the lifter behind Weekly Growth Muscle — someone who trains daily and researches hard, <strong>not a doctor, dietitian, or certified trainer</strong>. Everyone's nutritional needs are different, so treat this as education, not medical advice, and check with a qualified professional before big changes. <a href="about.html">Who writes this</a> · <a href="terms.html#health">Full disclaimer</a>.</span>
+  </p>
+</div>
+
+<!-- DAILY TARGETS -->
+<section class="wrap reveal" style="padding-top:14px">
+  <div class="seclabel">Daily Targets</div>
+  <h2 class="h3">Dial In Your Daily Macros</h2>
+  <p class="sub">Stop guessing with generic formulas. Plug in your current stats below to instantly generate the exact daily caloric and macronutrient breakdown you need to build maximum mass.</p>
+
+  <div class="calc" id="calc">
+    <div class="calc-head">
+      <div>
+        <div class="seclabel">Personalize</div>
+        <h4>TDEE &amp; Macro Calculator</h4>
+      </div>
+      <div class="seg" id="unitSeg" role="group" aria-label="Measurement units">
+        <button type="button" data-unit="metric" aria-pressed="false">Metric</button>
+        <button type="button" data-unit="imperial" class="on" aria-pressed="true">Imperial</button>
+      </div>
+    </div>
+
+    <div class="calc-grid">
+      <label class="field"><span id="wLabel">Weight (lb)</span>
+        <input id="weight" type="number" inputmode="decimal" min="20" max="660" step="0.1" value="181" />
+      </label>
+      <label class="field"><span id="hLabel">Height (in)</span>
+        <input id="height" type="number" inputmode="decimal" min="40" max="260" step="0.1" value="71" />
+      </label>
+      <label class="field"><span>Age</span>
+        <input id="age" type="number" inputmode="numeric" min="14" max="100" step="1" value="25" />
+      </label>
+      <div class="field"><span>Sex</span>
+        <div class="seg" id="sexSeg" role="group" aria-label="Sex">
+          <button type="button" data-sex="male" class="on" aria-pressed="true">Male</button>
+          <button type="button" data-sex="female" aria-pressed="false">Female</button>
+        </div>
+      </div>
+      <label class="field wide"><span>Activity level</span>
+        <select id="activity">
+          <option value="1.2">Sedentary — desk job</option>
+          <option value="1.375">Light — 1–3 days/wk</option>
+          <option value="1.55" selected>Moderate — 3–5 days/wk</option>
+          <option value="1.725">Very active — 6–7 days/wk</option>
+          <option value="1.9">Athlete — 2× a day</option>
+        </select>
+      </label>
+      <label class="field wide"><span>Goal</span>
+        <select id="goal">
+          <option value="0">Maintain</option>
+          <option value="250">Clean Bulk (+250)</option>
+          <option value="450" selected>Lean Mass (+450)</option>
+          <option value="650">Aggressive Mass (+650)</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="calc-actions">
+      <button class="btn" type="button" id="calcBtn">Update my targets ↓</button>
+      <span class="calc-err" id="calcErr" role="alert" hidden>Enter valid numbers to see your targets.</span>
+    </div>
+  </div>
+
+  <div class="target-grid" id="targetGrid"></div>
+  <p class="note" id="targetNote" style="max-width:none"></p>
+</section>
+
+<!-- MEAL PLAN -->
+<section class="wrap reveal">
+  <div class="seclabel" style="font-size:15px;letter-spacing:3px">Meal Plan</div>
+  <h2 class="h3">What To Eat, Day By Day</h2>
+  <div class="daytabs" id="dayTabs"></div>
+  <div class="meal-grid" id="mealGrid"></div>
+</section>
+
+<!-- GROCERY LIST -->
+<section class="wrap reveal">
+  <div class="seclabel" style="font-size:15px;letter-spacing:3px">Grocery List</div>
+  <h2 class="h3">One Trip, Whole Week</h2>
+  <div class="grocery-grid" id="groceryGrid"></div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <p class="foot-disclaimer"><span aria-hidden="true">⚕️</span> <strong>Medical disclaimer:</strong> Weekly Growth Muscle provides general fitness, nutrition, and supplement information for educational purposes only — it is not medical advice, and it is not written by a licensed healthcare professional. Always consult a qualified physician before starting any new exercise, diet, or supplement program. <a href="terms.html#health">Read the full disclaimer</a>.</p>
+    <a class="logo" href="index.html"><div class="mark">💪</div><div><b>Weekly Growth Muscle</b><span>Train hard. Eat big. Grow weekly.</span></div></a>
+    <div class="foot-right">
+      <nav class="foot-links" aria-label="Legal and site info">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="foot-copy">© 2026 Weekly Growth Muscle · 10-Week Mass Builder</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const PLAN = {
+  Monday: [
+    {meal:'Breakfast', items:['4 whole eggs','1 cup oatmeal cooked with 1 cup whole milk','1 banana','2 tbsp peanut butter']},
+    {meal:'Mid-Morning Snack', items:['1 cup Greek yogurt','½ cup granola','1 cup mixed berries']},
+    {meal:'Lunch', items:['8 oz grilled chicken breast','1½ cups cooked rice','1 cup broccoli','1 tbsp olive oil']},
+    {meal:'Pre-Workout', items:['2 slices whole-grain toast','2 tbsp peanut butter','1 apple']},
+    {meal:'Post-Workout', items:['2 scoops whey protein','1 banana']},
+    {meal:'Dinner', items:['8 oz lean ground beef','10 oz baked potato','Side salad with dressing']},
+    {meal:'Before Bed', items:['1 cup cottage cheese','1 oz almonds']},
+  ],
+  Tuesday: [
+    {meal:'Breakfast', items:['3 whole eggs + 3 egg whites','3 slices whole-grain toast','1 avocado']},
+    {meal:'Snack', items:['Protein shake (2 scoops whey)','1 banana']},
+    {meal:'Lunch', items:['8 oz turkey breast','1½ cups pasta','Marinara sauce','Mixed vegetables']},
+    {meal:'Pre-Workout', items:['1 cup oatmeal','1 tbsp honey']},
+    {meal:'Post-Workout', items:['2 scoops whey protein','Rice cakes (4)']},
+    {meal:'Dinner', items:['8 oz salmon','1½ cups jasmine rice','Asparagus']},
+    {meal:'Before Bed', items:['Greek yogurt','1 tbsp natural peanut butter']},
+  ],
+  Wednesday: [
+    {meal:'Breakfast', items:['Protein pancakes','4 turkey sausage links','1 cup strawberries']},
+    {meal:'Snack', items:['Cottage cheese','Pineapple chunks']},
+    {meal:'Lunch', items:['8 oz sirloin steak','1½ cups sweet potatoes','Green beans']},
+    {meal:'Pre-Workout', items:['Turkey sandwich on whole-grain bread','Piece of fruit']},
+    {meal:'Post-Workout', items:['Whey protein shake','Pretzels']},
+    {meal:'Dinner', items:['8 oz chicken thighs','1½ cups rice','Mixed vegetables']},
+    {meal:'Before Bed', items:['Casein protein shake','Handful of walnuts']},
+  ],
+  Thursday: [
+    {meal:'Breakfast', items:['Omelet with 4 eggs, spinach, and cheese','2 slices whole-grain toast','Orange juice']},
+    {meal:'Snack', items:['Greek yogurt parfait with berries and granola']},
+    {meal:'Lunch', items:['8 oz grilled chicken breast','1½ cups quinoa','Roasted vegetables']},
+    {meal:'Pre-Workout', items:['Banana','2 tbsp peanut butter']},
+    {meal:'Post-Workout', items:['2 scoops whey protein','Bagel']},
+    {meal:'Dinner', items:['8 oz pork tenderloin','Mashed potatoes','Green beans']},
+    {meal:'Before Bed', items:['Cottage cheese','Almonds']},
+  ],
+  Friday: [
+    {meal:'Breakfast', items:['Overnight oats with 1 cup oats, 1 scoop protein powder, 1 tbsp chia seeds & 1 cup milk','Blueberries']},
+    {meal:'Snack', items:['3 hard-boiled eggs','Apple']},
+    {meal:'Lunch', items:['8 oz lean ground beef','1½ cups rice','Mixed vegetables']},
+    {meal:'Pre-Workout', items:['Greek yogurt','Granola']},
+    {meal:'Post-Workout', items:['Whey protein shake','Banana']},
+    {meal:'Dinner', items:['8 oz baked cod','Roasted potatoes','Side salad']},
+    {meal:'Before Bed', items:['Casein shake','Peanut butter']},
+  ],
+  Saturday: [
+    {meal:'Breakfast', items:['4 eggs','2 whole-grain English muffins','2 slices turkey bacon']},
+    {meal:'Snack', items:['Smoothie: 2 scoops whey, banana, oats, peanut butter & milk']},
+    {meal:'Lunch', items:['8 oz chicken breast','1½ cups rice','Broccoli']},
+    {meal:'Pre-Workout', items:['Rice cakes with honey']},
+    {meal:'Post-Workout', items:['Whey protein shake']},
+    {meal:'Dinner', items:['8 oz flank steak','Sweet potato fries','Asparagus']},
+    {meal:'Before Bed', items:['Greek yogurt','Mixed nuts']},
+  ],
+  Sunday: [
+    {meal:'Breakfast', items:['French toast made with whole-grain bread','4 scrambled eggs','Mixed fruit']},
+    {meal:'Snack', items:['Cottage cheese','Almonds']},
+    {meal:'Lunch', items:['8 oz grilled turkey burgers','Whole-grain bun','Baked potatoes']},
+    {meal:'Pre-Workout', items:['Oatmeal with banana']},
+    {meal:'Post-Workout', items:['Whey protein shake']},
+    {meal:'Dinner', items:['8 oz salmon','1½ cups rice','Roasted vegetables']},
+    {meal:'Before Bed', items:['Casein protein shake','Peanut butter']},
+  ],
+};
+
+/* every day ends on a Sleep card — recovery is when muscle is built */
+Object.values(PLAN).forEach(day => day.push({
+  meal:'Sleep 💤',
+  items:['7–9 hours of quality sleep','Your muscles grow and recover overnight'],
+}));
+
+const GROCERY = [
+  {cat:'Protein Sources', items:['Eggs','Chicken breast','Chicken thighs','Lean ground beef','Sirloin steak','Flank steak','Turkey breast','Turkey burgers','Salmon','Cod','Pork tenderloin','Whey protein','Casein protein','Greek yogurt','Cottage cheese','Turkey sausage','Turkey bacon']},
+  {cat:'Carbohydrates', items:['Oatmeal','Rice','Sweet potatoes','Potatoes','Whole-grain bread','English muffins','Pasta','Quinoa','Granola','Rice cakes','Bagels','Fruit (bananas, berries, apples, oranges, pineapple)']},
+  {cat:'Healthy Fats', items:['Peanut butter','Almonds','Walnuts','Mixed nuts','Avocados','Olive oil','Chia seeds']},
+  {cat:'Vegetables', items:['Broccoli','Green beans','Asparagus','Spinach','Mixed vegetables','Salad greens']},
+];
+
+function escapeHTML(value){
+  return String(value).replace(/[&<>"']/g,ch=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[ch]));
+}
+
+/* ---- TDEE & macro calculator → live personalized daily targets ---- */
+(function(){
+  const grid = document.getElementById('targetGrid');
+  const note = document.getElementById('targetNote');
+  const errEl = document.getElementById('calcErr');
+  const els = {
+    weight:   document.getElementById('weight'),
+    height:   document.getElementById('height'),
+    age:      document.getElementById('age'),
+    activity: document.getElementById('activity'),
+    goal:     document.getElementById('goal'),
+  };
+  let units = 'imperial';   // 'metric' | 'imperial'
+  let sex = 'male';
+
+  const LB_PER_KG = 2.2046226, KG_PER_LB = 0.4535924, CM_PER_IN = 2.54;
+  const fmt = n => Math.round(n).toLocaleString('en-US');
+  const readNum = el => { const v = parseFloat(el.value); return isFinite(v) && v > 0 ? v : NaN; };
+
+  // plausible human ranges so impossible inputs (e.g. 6 cm tall) are flagged, not computed
+  const RANGES = {
+    metric:   { weight:[30,300,'kg'], height:[120,250,'cm'] },
+    imperial: { weight:[66,660,'lb'], height:[47,98,'in'] },
+  };
+
+  // keep the native HTML min/max attributes in step with the active unit system
+  function syncBounds(){
+    const r = RANGES[units];
+    els.weight.min = r.weight[0]; els.weight.max = r.weight[1];
+    els.height.min = r.height[0]; els.height.max = r.height[1];
+  }
+
+  function compute(){
+    const w = readNum(els.weight), h = readNum(els.height), age = readNum(els.age);
+    const r = RANGES[units];
+    let msg = '';
+    if(isNaN(w) || isNaN(h) || isNaN(age))      msg = 'Enter your weight, height and age to see your targets.';
+    else if(w < r.weight[0] || w > r.weight[1]) msg = `Weight looks off — enter ${r.weight[0]}–${r.weight[1]} ${r.weight[2]}.`;
+    else if(h < r.height[0] || h > r.height[1]) msg = `Height looks off — enter ${r.height[0]}–${r.height[1]} ${r.height[2]}.`;
+    else if(age < 14 || age > 100)              msg = 'Age looks off — enter 14–100.';
+    if(msg){ errEl.textContent = msg; errEl.hidden = false; grid.innerHTML = ''; note.innerHTML = ''; return; }
+    errEl.hidden = true;
+
+    // normalise inputs to metric
+    const kg = units === 'metric' ? w : w * KG_PER_LB;
+    const cm = units === 'metric' ? h : h * CM_PER_IN;
+    const lb = kg * LB_PER_KG;
+
+    // Mifflin–St Jeor BMR → TDEE → goal-adjusted calories
+    const bmr     = 10*kg + 6.25*cm - 5*age + (sex === 'male' ? 5 : -161);
+    const tdee    = bmr * parseFloat(els.activity.value);
+    const surplus = parseFloat(els.goal.value);
+    const cals    = tdee + surplus;
+
+    // macros: protein from bodyweight, fat 25% of calories, carbs fill the rest
+    const proteinG = Math.round(lb * 1.0);
+    const fatG     = Math.round((cals * 0.25) / 9);
+    const carbG    = Math.max(0, Math.round((cals - proteinG*4 - fatG*9) / 4));
+    const waterL   = Math.max(3, Math.round(kg * 0.04 * 10) / 10);
+
+    const goalLabel = els.goal.options[els.goal.selectedIndex].text.replace(/\s*\(.*\)/, '');
+
+    const cards = [
+      {v: fmt(cals),     l:'Calories',      u:'kcal · daily target'},
+      {v: proteinG+' g', l:'Protein',       u:'≈ 1.0 g per lb bodyweight'},
+      {v: carbG+' g',    l:'Carbohydrates', u:'fuel for training'},
+      {v: fatG+' g',     l:'Fats',          u:'25% of calories'},
+      {v: waterL+' L',   l:'Water',         u:'per day, minimum'},
+    ];
+    grid.innerHTML = cards.map(t=>`
+      <div class="stat">
+        <div class="v">${escapeHTML(t.v)}</div>
+        <div class="l">${escapeHTML(t.l)}</div>
+        <div class="u">${escapeHTML(t.u)}</div>
+      </div>`).join('');
+
+    note.innerHTML = `Estimated maintenance ≈ <strong>${fmt(tdee)} kcal/day</strong>. ` +
+      (surplus > 0
+        ? `With a <strong>${escapeHTML(goalLabel)}</strong> surplus of +${fmt(surplus)} kcal, aim for `
+        : `To maintain, aim for `) +
+      `<strong>${fmt(cals)} kcal</strong> — about <strong>${proteinG} g protein</strong>, ${carbG} g carbs and ${fatG} g fat per day. ` +
+      `Re-check every couple of weeks as your bodyweight changes.`;
+  }
+
+  function setOn(group, btn){
+    group.querySelectorAll('button').forEach(x=>{
+      const on = x === btn;
+      x.classList.toggle('on', on);
+      x.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+
+  // unit toggle — convert current values so the body stays physically the same
+  document.getElementById('unitSeg').addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    const next = b.dataset.unit; if(next === units) return;
+    const w = parseFloat(els.weight.value), h = parseFloat(els.height.value);
+    if(next === 'imperial'){
+      if(isFinite(w)) els.weight.value = Math.round(w * LB_PER_KG);
+      if(isFinite(h)) els.height.value = Math.round(h / CM_PER_IN);
+      document.getElementById('wLabel').textContent = 'Weight (lb)';
+      document.getElementById('hLabel').textContent = 'Height (in)';
+    } else {
+      if(isFinite(w)) els.weight.value = Math.round(w * KG_PER_LB);
+      if(isFinite(h)) els.height.value = Math.round(h * CM_PER_IN);
+      document.getElementById('wLabel').textContent = 'Weight (kg)';
+      document.getElementById('hLabel').textContent = 'Height (cm)';
+    }
+    units = next;
+    syncBounds();
+    setOn(e.currentTarget, b);
+    compute();
+  });
+
+  // sex toggle
+  document.getElementById('sexSeg').addEventListener('click', e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    sex = b.dataset.sex;
+    setOn(e.currentTarget, b);
+    compute();
+  });
+
+  // live recompute on any input
+  ['input','change'].forEach(ev=>{
+    [els.weight, els.height, els.age, els.activity, els.goal].forEach(el=> el.addEventListener(ev, compute));
+  });
+
+  // when a numeric field loses focus, snap an out-of-range entry to the nearest valid value
+  function clampOnBlur(el, kind){
+    el.addEventListener('blur', ()=>{
+      const v = parseFloat(el.value);
+      if(!isFinite(v)) return;  // leave blank fields for the inline message
+      const [lo, hi] = kind === 'age' ? [14, 100] : RANGES[units][kind];
+      const clamped = Math.min(hi, Math.max(lo, v));
+      if(clamped !== v) el.value = kind === 'age' ? Math.round(clamped) : clamped;
+      compute();
+    });
+  }
+  clampOnBlur(els.weight, 'weight');
+  clampOnBlur(els.height, 'height');
+  clampOnBlur(els.age, 'age');
+
+  document.getElementById('calcBtn').addEventListener('click', ()=>{
+    compute();
+    if(grid.animate) grid.animate([{opacity:.45},{opacity:1}], {duration:320, easing:'ease-out'});
+    grid.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+
+  syncBounds();   // align HTML min/max with the default unit system
+  compute();      // initial render from defaults
+})();
+
+/* grocery list — even cards, "Read more" on the long ones */
+const GROC_LIMIT = 7;
+const grocGrid = document.getElementById('groceryGrid');
+grocGrid.innerHTML = GROCERY.map(g=>`
+  <div class="gcard collapsed">
+    <h4><span class="dot"></span>${escapeHTML(g.cat)}</h4>
+    <ul>${g.items.map(i=>`<li>${escapeHTML(i)}</li>`).join('')}</ul>
+    <button class="gmore off" type="button">Read more</button>
+  </div>`).join('');
+grocGrid.querySelectorAll('.gcard').forEach(card=>{
+  const count = card.querySelectorAll('li').length;
+  const btn = card.querySelector('.gmore');
+  if(count > GROC_LIMIT){
+    btn.classList.remove('off');
+    btn.addEventListener('click',()=>{
+      const collapsed = card.classList.toggle('collapsed');
+      btn.textContent = collapsed ? 'Read more' : 'Read less';
+    });
+  }
+});
+
+/* meal plan with day tabs */
+const days = Object.keys(PLAN);
+const tabs = document.getElementById('dayTabs');
+const mealGrid = document.getElementById('mealGrid');
+
+function renderDay(day){
+  mealGrid.innerHTML = PLAN[day].map(m=>`
+    <div class="meal">
+      <div class="tag">${escapeHTML(m.meal)}</div>
+      <ul>${m.items.map(i=>`<li>${escapeHTML(i)}</li>`).join('')}</ul>
+    </div>`).join('');
+  [...tabs.children].forEach(b=>b.classList.toggle('active', b.dataset.day===day));
+}
+
+tabs.innerHTML = days.map((d,i)=>`<button class="daytab${i===0?' active':''}" data-day="${d}" type="button">${d}</button>`).join('');
+tabs.addEventListener('click', e=>{
+  const btn = e.target.closest('.daytab');
+  if(btn) renderDay(btn.dataset.day);
+});
+renderDay(days[0]);
+
+/* scroll reveal */
+const revealEls = document.querySelectorAll('.reveal');
+if('IntersectionObserver' in window){
+  const io = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.08});
+  revealEls.forEach(el=>io.observe(el));
+}else{
+  revealEls.forEach(el=>el.classList.add('in'));
+}
+</script>
+<script src="assets/enhance.js" defer></script>
+</body>
+</html>
